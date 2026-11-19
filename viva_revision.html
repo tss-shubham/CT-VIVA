@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reasoning Viva Revision</title>
+<style>
+:root{--bg:#fff;--card:#f5f6f8;--tx:#1a1d23;--mu:#5b6270;--ac:#c4161c;--acx:#fff;--bd:#dde0e6;--ok:#17803d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--card:#1e2127;--tx:#eceef2;--mu:#9aa1ae;--ac:#ff5a5f;--acx:#14161a;--bd:#333843;--ok:#4cc betray;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#14161a;--card:#1e2127;--tx:#eceef2;--mu:#9aa1ae;--ac:#ff5a5f;--acx:#14161a;--bd:#333843;--ok:#4cc27a;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:16px}
+h1{font-size:1.3rem;margin:4px 0 2px}.sub{color:var(--mu);font-size:.9rem;margin:0 0 14px}
+.tabs,.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+button{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:999px;padding:6px 13px}
+button.on{background:var(--ac);color:var(--acx);border-color:var(--ac)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin:12px 0}
+.card h2{font-size:1.05rem;margin:0 0 6px;color:var(--ac)}
+.card ul{margin:6px 0;padding-left:20px}.card li{margin:4px 0}
+code,.ex{background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:1px 6px;font-family:ui-monospace,Menlo,monospace;font-size:.9em}
+.ex{display:block;padding:8px 10px;margin:8px 0;white-space:pre-wrap}
+.q{font-size:1.1rem;font-weight:600;margin:6px 0 12px}
+.ans{border-left:4px solid var(--ok);padding:6px 12px;margin:10px 0;white-space:pre-wrap}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.mu{color:var(--mu);font-size:.88rem}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:8px 0}.bar i{display:block;height:100%;background:var(--ok);width:0}
+.hid{display:none}.gap{border-left:4px solid var(--ac);padding-left:10px}
+</style></head><body><main>
+<h1>Reasoning Viva Revision</h1>
+<p class="sub">Critical Thinking and Logical Reasoning · Prof. Naresh Kundwani · built from your uploaded lectures and sheets</p>
+<div class="tabs"><button id="tR" class="on">Revise</button><button id="tV">Viva practice</button></div>
+<div id="revise"></div>
+<div id="viva" class="hid">
+ <div class="chips" id="filters"></div>
+ <div class="mu" id="prog"></div><div class="bar"><i id="barI"></i></div>
+ <div class="card"><div class="mu" id="qtop"></div><div class="q" id="qtxt"></div>
+  <div class="ans hid" id="atxt"></div>
+  <div class="row"><button id="bShow">Show answer</button><button id="bOk" class="hid">Got it</button><button id="bNo" class="hid">Revise again</button><button id="bNext">Skip / next</button></div></div>
+ <div class="row"><button id="bMock">Mock viva: 10 random</button><button id="bWeak">Only “revise again”</button><button id="bReset">Reset progress</button></div>
+</div>
+</main>
+<script>
+const T=[
+{n:"Dictionary",notes:[
+"Compare letter by letter: first letter, then second, third… A word that is a prefix of another comes first (<code>Plan</code> before <code>Plane</code>).",
+"“Open from the back” means reverse order (Z to A): sort normally, then read the list backwards. The last word in a back-opened dictionary is the first word in a normal one.",
+"Middle word of 5: sort, take the 3rd.",
+"<span class='ex'>unison, unity, union, unique → union, unique, unison, unity  (3,4,1,2)\nPimple, Pink, Pirate, Pistol, Pisces → Pimple, Pink, Pirate, Pisces, Pistol</span>"],
+qa:[["How do you arrange words in dictionary order?","Compare first letters; if equal, compare second letters, and so on. A shorter word that is a prefix of a longer one comes first."],
+["What changes when the dictionary is opened from the back?","The order is reversed (Z to A). Sort alphabetically and reverse the list."],
+["Which comes first, Pisces or Pistol, and why?","Pisces. They match up to “Pis”, then c comes before t."],
+["Arrange: Disclose, Disco, Discover, Discreat, Discrete.","Disclose, Disco, Discover, Discreat, Discrete. (l before o; Disco is a prefix of Discover; o before r; a before t.)"],
+["How do you find the middle word among five words?","Arrange them in dictionary order and take the 3rd."],
+["Order of union, unique, unison, unity?","union, unique, unison, unity. (Third letter n; then i; then q before s before t.)"]]},
+{n:"Alphabet series",notes:[
+"26 letters. Position from the left = n. Position from the right = <b>27 − n</b>. “Front/left end” and “back/right end” are the same idea.",
+"<b>EJOTY</b> anchors: E=5, J=10, O=15, T=20, Y=25 (and X=24).",
+"“n-th to the right of” adds, “to the left of” subtracts. Middle of two letters = <b>(a + b) ÷ 2</b>.",
+"Pair of letters: count pairs in a word where the number of letters between them in the word equals the number between them in the alphabet (same position difference).",
+"Sequence of letters: swap 1↔6, 2↔7, 3↔8 and so on; or shift vowels +1 and consonants −1; or sort the word alphabetically and count letters that stay in place.",
+"Word formation: use each letter of the given word only as often as it appears there.",
+"<span class='ex'>Middle of 7th and 17th from left: (7+17)/2 = 12 = L\n4th right of middle of 7th & 25th: 16 = P, +4 = 20 = T\n14th from back: 27−14 = 13 = M\nHISTORICAL after swaps → RICALHISTO, 3rd from right = S</span>"],
+qa:[["How do you find a letter’s position from the right?","27 minus its position from the left."],
+["What is the EJOTY trick?","E=5, J=10, O=15, T=20, Y=25 are 5-step anchors for quickly locating positions from the left."],
+["Find the middle letter between the 7th and 17th from the left.","(7+17)/2 = 12th = L."],
+["What is the 8th letter to the left of the 8th from the right end?","8th from right = 19 = S. 8 to the left = 11 = K."],
+["What is the 3rd letter to the right of the 6th from the left end?","6+3 = 9 = I."],
+["When is a pair of letters counted in a word?","When letters in the word have as many letters between them as they have in the alphabet. In BOXES, B and E: 2 letters between in both. B comes first alphabetically."],
+["In HISTORICAL, swap 1↔6, 2↔7 and so on. What is 3rd from the right?","The word becomes R I C A L H I S T O. 3rd from right = S."],
+["How do you handle “meaningful word” questions?","Rearrange the chosen letters. One meaningful word: answer from it. More than one: X. None: Y, as the question states."]]},
+{n:"Dice",notes:[
+"A dice has <b>6 faces, 12 edges, 8 corners</b>. Only 3 faces are visible at once.",
+"<b>Standard dice:</b> opposite faces sum to 7 (1–6, 2–5, 3–4). <b>General dice:</b> opposite faces need not sum to 7 (as defined in your lecture).",
+"<b>Rule of common digits:</b> two orientations share <u>two</u> faces, so the remaining two faces are opposite to each other.",
+"<b>Rule of square circular motion:</b> two orientations share <u>one</u> face. Write the other faces clockwise from the common face in each dice; faces at the same position are opposite.",
+"<span class='ex'>Sample Q: dice (1) top 6, front 3, right 2; dice (2) top 6, front 2, right 4.\nCommon: 6 and 2 → remaining 3 and 4 are opposite. Opposite of 3 = 4.</span>"],
+qa:[["How many faces, edges and corners does a dice have?","6 faces, 12 edges, 8 corners."],
+["What is a standard dice?","One where opposite faces sum to 7."],
+["State the rule of common digits.","If two orientations of the same dice show two common faces, the remaining two faces are opposite each other. It works for standard and general dice."],
+["State the rule of square circular motion.","If only one face is common, go clockwise from it in both orientations; the numbers at matching positions are opposite."],
+["Dice 1: top 6, front 3, right 2. Dice 2: top 6, front 2, right 4. What is opposite 3?","6 and 2 are common, so 3 and 4 are opposite. Answer: 4."],
+["How many faces are visible at one time, and why does it matter?","Three. Each view gives 3 faces, so you need 2 views (or more) to link every face."]]},
+{n:"Cube",notes:[
+"Big cube of edge <b>a</b> cut into small cubes of edge <b>b</b>. Let <b>n = a ÷ b</b>.",
+"Number of small cubes = <b>n³</b>.",
+"Number of cuts = <b>3(n − 1)</b>: each of the 3 directions needs n−1 cuts.",
+"Given cubes count: n = cube root; small edge = a ÷ n; big edge = n × b.",
+"<span class='ex'>12 cm into 1 cm: n=12, 12³ = 1728\n33 cm into 3 cm: n=11, cuts = 3×10 = 30\nCut 12 times, small edge 3: n−1=4, n=5, big edge 15\n24 cm into 216 cubes: n=6, small edge 4</span>"],
+qa:[["How many small cubes from a cube of edge 12 cm into 1 cm cubes?","n = 12, so 12³ = 1728."],
+["What is the cuts formula, and why?","3(n−1) where n = big edge ÷ small edge. Each of length, width and height needs n−1 cuts."],
+["Cuts needed for 33 cm into 3 cm cubes?","n = 11, cuts = 3 × 10 = 30."],
+["A big cube gives 216 small cubes. Big edge is 24 cm. Small edge?","Cube root of 216 = 6, so 24 ÷ 6 = 4 cm."],
+["A cube is cut 12 times to get 3 cm cubes. Big edge?","3(n−1) = 12, so n = 5. Big edge = 5 × 3 = 15 cm."],
+["Cut 30 times, small edge 5 cm. Big edge?","n−1 = 10, n = 11, edge = 55 cm."]]},
+{n:"Matrix",notes:[
+"Two 5×5 matrices. Matrix I is numbered 0–4, Matrix II is 5–9 (rows and columns).",
+"A letter is written <b>row number first, then column number</b>. Row 0, col 2 = <code>02</code>. Row 5, col 9 = <code>59</code>.",
+"If a letter repeats, any one of its coordinates is valid, so check each option letter by letter.",
+"Tip: identify which matrix a code belongs to from the digits (0–4 = Matrix I, 5–9 = Matrix II). A code like 05 would mean row 0 (Matrix I), column 5, which is invalid, so mixed digits can be eliminated fast.",
+"<span class='ex'>Sheet matrices: BRAIN → B=00, R=59, A=02, I=42, N=68 → 00, 59, 02, 42, 68</span>"],
+qa:[["How is a letter coded in the matrix?","Row number first, then column number, e.g. row 0 col 2 = 02."],
+["Which numbers belong to which matrix?","Matrix I uses 0–4; Matrix II uses 5–9."],
+["What if a letter appears more than once?","Any of its coordinate pairs is valid."],
+["What is the fastest way to solve the options?","Find the first letter’s coordinates, eliminate options that do not match, and repeat for the next letter."]]},
+{n:"Inequality",notes:[
+"Priority of signs: <b>&gt; and &lt;</b> strongest, then <b>≥ and ≤</b>, then <b>=</b> weakest. In a chain, the strongest sign decides the final relation.",
+"Same direction combine: &gt; with = gives &gt;; ≥ with = gives ≥; &gt; with ≥ gives &gt;.",
+"<b>Blocking rule:</b> opposite directions meeting (A &gt; B &lt; C) give no relation between A and C, so a conclusion linking them is false.",
+"Fragmented statements: join them through the common variable first, then test each conclusion.",
+"“Either I or II”: both conclusions concern the same two variables and are complements, so exactly one must be true but neither is definite alone.",
+"Fill the sign: pick the sign that makes the combined chain give exactly the conclusion’s relation.",
+"<span class='ex'>A &gt; B ≥ C = D &lt; E\nA &gt; D ✓   C &lt; E ✓   B ≥ D ✓  → all follow</span>"],
+qa:[["What is the priority order of inequality signs?","&gt; and &lt; first, then ≥ and ≤, then =."],
+["State the blocking rule.","If opposite signs face each other in a chain (A &gt; B &lt; C), no definite relation exists between the end variables."],
+["A &gt; B ≥ C = D. What is the relation of A and D?","A &gt; D, since the strict sign dominates."],
+["A &lt; B &gt; C. Does A &lt; C follow?","No. The path is blocked, so nothing definite follows."],
+["When does a conclusion with ≥ follow?","When the chain gives &gt;, ≥ or = in that direction (never a blocked or reversed path)."],
+["When do you choose “Either I or II”?","When the two conclusions involve the same variables, neither is definite alone, and together they cover all possibilities (e.g. ≥ and &lt;)."],
+["Statement A ≥ B _ C, conclusion A ≥ C. Which sign fills the blank?","=. A ≥ B = C gives A ≥ C exactly."],
+["How do you handle statements given in separate lines?","Link them through the common variable into one chain, then test each conclusion."]]},
+{n:"Mathematical operations",notes:[
+"Step 1: replace each symbol with its <b>given meaning</b>. Step 2: apply BODMAS (division/multiplication before addition/subtraction).",
+"“Interchange signs” questions: try each option, swap the two signs, and check whether the left side equals the right side.",
+"“Choose signs for blanks”: substitute the options in order and test.",
+"<span class='ex'>If + = ÷ , − = + , × = × , ÷ = −: 18 + 6 − 3 × 4 ÷ 2 → 18 ÷ 6 + 3 × 4 − 2 = 3 + 12 − 2 = 13\n9 × 3 + 12 ÷ 4 − 5 = 46 → swap × and ÷: 9 ÷ 3 + 12 × 4 − 5 = 3 + 48 − 5 = 46 ✓\n6 × 5 + 3 = 23 → swap signs and swap 6 and 5: 5 + 6 × 3 = 23 ✓</span>"],
+qa:[["What is the method for symbol substitution?","Replace each symbol with its stated meaning, then solve using BODMAS."],
+["How do you solve “which two signs should be interchanged”?","Swap each pair in turn and check if the equation becomes true."],
+["9 × 3 + 12 ÷ 4 − 5 = 46. Which signs swap?","× and ÷: 9 ÷ 3 + 12 × 4 − 5 = 3 + 48 − 5 = 46."],
+["6 × 5 + 3 = 23: what must be interchanged?","Signs × and +, and numbers 6 and 5: 5 + 6 × 3 = 23."],
+["If + means ÷, − means +, × means ×, ÷ means −, evaluate 18 + 6 − 3 × 4 ÷ 2.","18 ÷ 6 + 3 × 4 − 2 = 3 + 12 − 2 = 13. (Your sheet’s key lists 11 for this one; my working gives 13, so check with your faculty.)"]]},
+{n:"Coding-decoding",notes:[
+"<b>Type 1:</b> fixed or pattern letter shifts. RADIO → UDGLR is +3 each. LEADER → TMILMZ is +8. NUMBER → PSOZGP alternates +2, −2.",
+"<b>Type 2:</b> reverse the word, then shift. HANGER reversed = REGNAH, each −2 → PCELYF.",
+"<b>Type 3:</b> letter-value sums (A=1…Z=26). MIGHT = 13+9+7+8+20 = 57. Variants: sum × number of letters (JUNGLE = 69 × 6 = 414) or sum ÷ letters (HOTEL = 60 ÷ 5 = 12).",
+"<b>Type 4:</b> word-code matching. Find a common word across two statements, then its common code number.",
+"<b>Type 5:</b> substitution. Follow the chain of renamed objects. If eraser is called box, box is called pencil, pencil is called sharpener, then a child writes with a pencil, which is called <b>sharpener</b>.",
+"<span class='ex'>PHOTO (+3) → SKRWR\nMONITER (+2,−2 alternating) → OMPGVCT\nBRUTAL (reverse, −2) → JYRSPZ</span>"],
+qa:[["What are the five types of coding-decoding in your notes?","1) Letter shifts/patterns. 2) Reverse then shift. 3) Letter-value sums. 4) Word-code matching. 5) Substitution of names."],
+["RADIO is UDGLR. Code PHOTO.","Shift +3 each: SKRWR."],
+["NUMBER is PSOZGP. What is the pattern?","Alternating +2, −2 (N+2, U−2, M+2, B−2…). MONITER → OMPGVCT."],
+["HANGER is PCELYF. Code BRUTAL.","Reverse then −2 each: LATURB → JYRSPZ."],
+["MIGHT is 57. How?","Sum of positions: 13+9+7+8+20 = 57."],
+["JUNGLE is 414. What is the rule?","Sum of positions is 69, times 6 letters = 414."],
+["How do you solve word-code matching (Type 4)?","Find the common word in two statements and the common code in their codes; that code is that word."],
+["Eraser is called box, box is pencil, pencil is sharpener. What does a child write with?","A pencil, which is now called sharpener."]]}
+];
+const $=id=>document.getElementById(id);
+let store={};try{store=JSON.parse(localStorage.getItem("vivaState")||"{}")}catch(e){}
+function save(){try{localStorage.setItem("vivaState",JSON.stringify(store))}catch(e){}}
+$("revise").innerHTML=T.map(t=>`<div class="card"><h2>${t.n}</h2><ul>${t.notes.map(x=>x.startsWith("<span")?x:"<li>"+x+"</li>").join("")}</ul></div>`).join("")+
+`<div class="card gap"><h2>Counting of figures</h2><p>This topic is on your syllabus list but none of the uploaded files cover it, so it is not included here. Revise it from your class notes.</p></div>`;
+let filt="All",pool=[],idx=0,mode="all";
+const all=[];T.forEach((t,i)=>t.qa.forEach((q,j)=>all.push({t:t.n,q:q[0],a:q[1],k:i+"-"+j})));
+$("filters").innerHTML=["All",...T.map(t=>t.n)].map(n=>`<button data-f="${n}" class="${n=="All"?"on":""}">${n}</button>`).join("");
+function build(){pool=all.filter(x=>(filt=="All"||x.t==filt)&&(mode!="weak"||store[x.k]==2));
+ if(mode=="mock")pool=[...all].sort(()=>Math.random()-.5).slice(0,10);else pool.sort(()=>Math.random()-.5);idx=0;show()}
+function show(){const x=pool[idx];
+ const done=all.filter(a=>store[a.k]==1).length;
+ $("prog").textContent=`Mastered ${done} of ${all.length} · showing ${pool.length?idx+1:0} of ${pool.length}`;
+ $("barI").style.width=(100*done/all.length)+"%";
+ ["atxt","bOk","bNo"].forEach(i=>$(i).classList.add("hid"));$("bShow").classList.remove("hid");
+ if(!x){$("qtop").textContent="";$("qtxt").textContent="Nothing here. Pick another topic or reset progress.";return}
+ $("qtop").textContent=x.t;$("qtxt").innerHTML=x.q;$("atxt").innerHTML=x.a}
+$("filters").onclick=e=>{const f=e.target.dataset.f;if(!f)return;filt=f;mode="all";
+ document.querySelectorAll("#filters button").forEach(b=>b.classList.toggle("on",b.dataset.f==f));build()};
+$("bShow").onclick=()=>{["atxt","bOk","bNo"].forEach(i=>$(i).classList.remove("hid"));$("bShow").classList.add("hid")};
+const next=()=>{idx=(idx+1)%Math.max(pool.length,1);show()};
+$("bNext").onclick=next;
+$("bOk").onclick=()=>{store[pool[idx].k]=1;save();next()};
+$("bNo").onclick=()=>{store[pool[idx].k]=2;save();next()};
+$("bMock").onclick=()=>{mode="mock";build()};
+$("bWeak").onclick=()=>{mode="weak";build()};
+$("bReset").onclick=()=>{store={};save();mode="all";build()};
+function tab(v){$("revise").classList.toggle("hid",v!="R");$("viva").classList.toggle("hid",v!="V");
+ $("tR").classList.toggle("on",v=="R");$("tV").classList.toggle("on",v=="V");if(v=="V"&&!pool.length)build()}
+$("tR").onclick=()=>tab("R");$("tV").onclick=()=>tab("V");
+</script></body></html>
